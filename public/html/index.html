@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>mapchat</title>
+    <link rel="stylesheet" href="/stylesheets/bootstrap/css/bootstrap.min.css">
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+</head>
+<body ng-app="mapchat" class="container-fluid">
+    <div class="main-area col-xs-12 col-md-6 col-md-offset-3" ng-controller="index as c">
+        <div class="fixedTop">
+            <div class="headerText">mapchat</div>
+        </div>
+        <div class="message-area row">
+            <div class="row" ng-repeat="message in c.messages track by message._id | orderBy: 'receivedAt'">
+                <div class="message"  ng-class="{ 'ownMessage': c.socketId === message.socketId }">
+                    <div class="messageText" >{{message.messageText}}</div>
+                    <div class="coords">{{c.getMessageDistance(message)|number:2|distance}}</div>
+                    <div class="messageTime">{{message.receivedAt|time}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="input-area row">
+            <form class="fixedBottom col-xs-12 col-md-6">
+                <input type="text" ng-model="c.messageText" placeholder="write your message" id="messageText" class="col-xs-9"/>
+                <button type="submit" ng-click="c.sendMessage(c.messageText)" id="sendButton" class="col-xs-3 btn btn-primary">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="javascripts/lib/jquery.min.js"></script>
+    <script src="javascripts/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="javascripts/lib/angular.min.js"></script>
+    <script src="javascripts/module.js"></script>
+    <script src="javascripts/filters.js"></script>
+    <script src="javascripts/indexController.js"></script>
+    <script src="javascripts/lib//socket.io.js"></script>
+    <script src="javascripts/script.js"></script>
+</body>
+</html>

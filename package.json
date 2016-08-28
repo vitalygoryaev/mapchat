@@ -1,0 +1,21 @@
+{
+  "name": "mapchat",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "angular": "^1.5.8",
+    "body-parser": "~1.15.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "express": "~4.13.4",
+    "express-handlebars": "^3.0.0",
+    "jquery": "^3.1.0",
+    "mongodb": "^2.2.7",
+    "mongoose": "^4.5.9",
+    "morgan": "~1.7.0",
+    "socket.io": "^1.4.8"
+  }
+}

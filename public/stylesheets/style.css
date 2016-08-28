@@ -1,0 +1,61 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+input#messageText {
+  float:left;
+}
+
+button#sendButton {
+  float:right;
+}
+
+div.message {
+  background-color: #E5E5EA;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 12px;
+  float:left;
+  max-width: 70%;
+  min-width: 30%;
+}
+
+div.message.ownMessage {
+  background: radial-gradient(circle, #4EBDFA, #2297FD);
+  float:right;
+  color: white;
+}
+
+div.messageText {
+  font-size: 14pt;
+}
+
+div.messageTime {
+  font-size: 10pt;
+  font-style: italic;
+}
+
+.fixedTop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #cccccc;
+}
+
+div.headerText {
+  padding: 5px 25px;
+  font-weight: bold;
+  font-size: 16pt;
+}
+
+.fixedBottom {
+  position: fixed;
+  bottom: 0;
+  background-color: #cccccc;
+}
