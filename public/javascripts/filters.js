@@ -1,34 +1,24 @@
 angular.module('mapchat')
     .filter('distance', function() {
         return function(distanceString) {
-            if (distanceString === '0.00') {
-                return 'Your exact position';
+            if (distanceString < 1) {
+                return 'Your current position';
             }
             
             return 'Distance: ' + distanceString + 'm';
         };
     })
-    .filter('time', function() {
+    .filter('time', function($filter) {
         return function(dateString) {
-            let date = new Date(dateString);
+            var date = new Date(dateString);
 
-            var timeDifference = Date.now() - date.getTime();
-            var second = 1000;
-            var minute = 60000;
-            var hour = 60 * 60 * 1000;
+            var todayDate = (new Date()).setHours(0,0,0,0);
+            var messageDate = (new Date(date)).setHours(0,0,0,0);
 
-            if (timeDifference < minute) {
-                return Math.floor(timeDifference / second) + 's ago';
+            if (todayDate == messageDate) {
+                return $filter('date')(date, 'HH:mm');
             }
 
-            if (timeDifference < hour) {
-                return Math.floor(timeDifference / minute) + 'm ago';
-            }
-
-            if (timeDifference < 24 * hour) {
-                return Math.floor(timeDifference / hour) + 'h ago';
-            }
-
-            return date;
+            return $filter('date')(date, 'UTC');
         };
     });

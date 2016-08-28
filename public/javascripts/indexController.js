@@ -9,6 +9,7 @@ angular.module('mapchat')
 
         self.messages = [];
         self.radius = 1000; // meters
+        self.showLocationError = true;
 
         var socket = io();
 
@@ -27,26 +28,15 @@ angular.module('mapchat')
         });
         
         this.sendMessage = function (messageText) {
-            navigator.geolocation.getCurrentPosition(function success(location) {
-                var position = {
-                    longitude: location.coords.longitude,
-                    latitude: location.coords.latitude,
-                    accuracy: location.coords.accuracy
-                };
+            socket.emit("newMessage", { messageText: messageText, position: self.position });
 
-                self.position = position;
-
-                socket.emit("newMessage", { messageText: messageText, position: position });
-
-                self.messageText = '';
-                $scope.$digest();
-            }, function error(err) {
-                console.log("failed to get location: " + JSON.stringify(err));
-            });
+            self.messageText = '';
         }
 
         function startWatchPosition() {
             navigator.geolocation.watchPosition(function success(location) {
+                self.showLocationError = false;
+                
                 var position = {
                     longitude: location.coords.longitude,
                     latitude: location.coords.latitude,
@@ -57,6 +47,7 @@ angular.module('mapchat')
 
                 socket.emit("newPosition", { position: position, radius: self.radius });
             }, function error(err) {
+                self.showLocationError = true;
                 console.log("failed to get location: " + JSON.stringify(err));
             });
         }

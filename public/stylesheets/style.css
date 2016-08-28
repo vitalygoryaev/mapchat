@@ -35,9 +35,16 @@ div.messageText {
   font-size: 14pt;
 }
 
-div.messageTime {
+.messageTime {
   font-size: 10pt;
   font-style: italic;
+  float: right;
+  color: #AAAAAA;
+  margin-left: 20px;
+}
+
+.ownMessage .messageTime{
+  color: #FFFFFF;
 }
 
 .fixedTop {

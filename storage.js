@@ -62,7 +62,7 @@ module.exports = class database {
             }
         };
 
-        return this.Message.find(query).sort('receivedAt').limit(30).exec()
+        return this.Message.find(query).sort('-receivedAt').limit(30).exec()
             .catch(function errorHander(error) {
                 console.log("get messages failed: " + error)
             });

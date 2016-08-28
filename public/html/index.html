@@ -12,11 +12,11 @@
             <div class="headerText">mapchat</div>
         </div>
         <div class="message-area row">
-            <div class="row" ng-repeat="message in c.messages track by message._id | orderBy: 'receivedAt'">
+            <div ng-if="c.showLocationError" class="h1">Could not get your location. Please enable in settings.</div>
+            <div class="row" ng-repeat="message in c.messages | orderBy: 'receivedAt' track by message._id ">
                 <div class="message"  ng-class="{ 'ownMessage': c.socketId === message.socketId }">
                     <div class="messageText" >{{message.messageText}}</div>
-                    <div class="coords">{{c.getMessageDistance(message)|number:2|distance}}</div>
-                    <div class="messageTime">{{message.receivedAt|time}}</div>
+                    <div class="coords">{{c.getMessageDistance(message)|number:0|distance}}<span class="messageTime">{{message.receivedAt|time}}</span></div>
                 </div>
             </div>
         </div>

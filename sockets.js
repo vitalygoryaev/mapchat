@@ -2,18 +2,20 @@ let database = require('./storage');
 let geo = require('./geolocation');
 let consumers = {};
 let storage = new database();
+let myIO = {};
 
 function socketsBase() {
+    myIO = this.io;
     this.io.on('connection', socketsHandler.bind({ io: this.io }));
+    this.io.on('disconnect', function disconnectHandler(socket) {
+       delete consumers[socket.id];
+    });
 }
 
 function socketsHandler(socket){
-    console.log('a user joined');
-    console.log('socketId: ' + socket.id);
-
     socket.on('newMessage', function (message) {
         let consumer = consumers[socket.id];
-        
+
         // reject consumer without position
         if (!consumer || !consumer.position || !consumer.position.longitude || !consumer.position.latitude || !consumer.radius) {
             return;
@@ -25,11 +27,8 @@ function socketsHandler(socket){
 
             storage.saveMessage(message)
                 .then(function (message) {
-                    console.log("SAVED MESSAGE: " + JSON.stringify(message));
-                    
-                    // emit newMessageReceived to sender
-                    socket.emit("newMessageReceived", message);
-                    
+                    socket.emit('newMessageReceived', message);
+
                     // emit newMessageReceived to users with appropriate position
                     broadcastToConsumersInRange.call({ io: this.io }, consumers, message);
                 });
@@ -37,8 +36,6 @@ function socketsHandler(socket){
     });
 
     socket.on('newPosition', function (consumer) {
-        console.log('new position from ' + socket.id);
-
         // reject consumer without position
         if (!consumer || !consumer.position || !consumer.position.longitude || !consumer.position.latitude || !consumer.radius) {
             return;
@@ -54,15 +51,13 @@ function socketsHandler(socket){
             });
     });
 
-    
-}
-
-function broadcastToConsumersInRange(consumers, message) {
-    Object.keys(consumers).forEach((socketId) => {
-        if (geo.consumerIsInRange(consumers[socketId], message)) {
-            this.io.to(socketId).emit('newMessage', message);
-        }
-    });
+    function broadcastToConsumersInRange(consumers, message) {
+        Object.keys(consumers).forEach((socketId) => {
+            if (geo.consumerIsInRange(consumers[socketId], message)) {
+                socket.broadcast.to(socketId).emit('newMessageReceived', message);
+            }
+        });
+    }
 }
 
 module.exports = socketsBase;
