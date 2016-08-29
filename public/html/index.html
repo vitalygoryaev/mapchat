@@ -7,13 +7,12 @@
     <link rel='stylesheet' href='/stylesheets/style.css'/>
 </head>
 <body ng-app="mapchat" ng-controller="index as c">
-    <div id="map">HELLO</div>
-    <div ng-if="false">
+    <div id="map" ng-show="c.showMap"></div>
+    <div ng-if="!c.showMap">
     <nav class="navbar navbar-default navbar-fixed-top">
-        
-            <div class="container">
-                <div class="col-xs-6 headerText">mapchat</div>
-                <div class="col-xs-6"><input id="username" class="form-control" type="text" placeholder="Your nickname" ng-model="c.userName"></div>
+        <div class="container">
+            <div class="col-xs-6 headerText">mapchat</div>
+            <div class="col-xs-6"><input id="username" class="form-control" type="text" placeholder="Your nickname" ng-model="c.userName"></div>
         </div>
     </nav>
     <div  class="container">
@@ -23,7 +22,7 @@
 
             <div ng-if="c.showLocationError" class="h1">{{c.locationErrorMessage}}</div>
 
-            <div class="row" ng-repeat="message in c.messages | orderBy: 'receivedAt' track by message._id " id={{message._id}}>
+            <div class="row" ng-repeat="message in c.messages | orderBy: 'receivedAt' track by message._id " id={{message._id}} ng-click="c.renderMap(message)">
                 <div class="col-xs-12">
                 <div ng-if=$first in-view="$inview&&c.getHistory(message._id)"></div>
                 <div class="message"  ng-class="{ 'ownMessage': c.socketId === message.socketId }">
@@ -50,7 +49,7 @@
                 </div>
             </form>
         </div>
-        <nav>
+        </nav>
     </div>
     </div>
     </div>
@@ -63,26 +62,8 @@
     <script src="javascripts/indexController.js"></script>
     <script src="javascripts/lib//socket.io.js"></script>
     <script src="javascripts/script.js"></script>
-    <script>
-      function initMap() {
-        var myLatLng = {lat: -25.363, lng: 131.044};
-
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 4,
-            center: myLatLng
-        });
-
-        var infowindow = new google.maps.InfoWindow({
-            content: "hello dick"
-        });
-
-        infowindow.setPosition(myLatLng);
-
-        infowindow.open(map);
-      }
-    </script>
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBztdrbMors7H1VrRH9DQW6IVzySSDHGHg&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBztdrbMors7H1VrRH9DQW6IVzySSDHGHg">
     </script>
 </body>
 </html>

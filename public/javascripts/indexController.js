@@ -4,12 +4,13 @@ angular.module('mapchat')
     .run(function ($rootScope) {
         $rootScope.version = 1; 
     })
-    .controller('index', function($scope, $anchorScroll) {
+    .controller('index', function($scope, $anchorScroll, $document) {
         var self = this;
 
         self.messages = [];
         self.radius = 1000; // meters
         self.showLocationError = false;
+        self.showMap = false;
         self.locationErrorMessage = 'Could not get your location. Check if Location Services are enabled on your device.';
 
         var socket = io();
@@ -89,5 +90,30 @@ angular.module('mapchat')
                 self.firstMessageId = firstMessageId;
                 socket.emit('getHistory', self.messages.length);
             }
+        }
+        
+        self.renderMap = function(message) {
+            var myLatLng = {lat: message.position.latitude, lng: message.position.longitude};
+
+            var mapDiv = document.getElementById('map');
+
+            var map = new google.maps.Map(mapDiv, {
+                zoom: 16,
+                center: myLatLng
+            });
+
+            self.messages.forEach(function(messageItem) {
+                var messageLatLng = {lat: messageItem.position.latitude, lng: messageItem.position.longitude};
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: messageItem.messageText
+                });
+
+                infowindow.setPosition(messageLatLng);
+
+                infowindow.open(map);
+            });
+
+            self.showMap = true;
         }
     });
