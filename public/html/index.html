@@ -7,6 +7,8 @@
     <link rel='stylesheet' href='/stylesheets/style.css'/>
 </head>
 <body ng-app="mapchat" ng-controller="index as c">
+    <div id="map">HELLO</div>
+    <div ng-if="false">
     <nav class="navbar navbar-default navbar-fixed-top">
         
             <div class="container">
@@ -15,6 +17,7 @@
         </div>
     </nav>
     <div  class="container">
+        
     <div class="main-area"  ng-cloak>
         <div class="message-area">
 
@@ -50,7 +53,7 @@
         <nav>
     </div>
     </div>
-
+    </div>
     <script src="javascripts/lib/jquery.min.js"></script>
     <script src="javascripts/lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="javascripts/lib/angular.min.js"></script>
@@ -60,5 +63,26 @@
     <script src="javascripts/indexController.js"></script>
     <script src="javascripts/lib//socket.io.js"></script>
     <script src="javascripts/script.js"></script>
+    <script>
+      function initMap() {
+        var myLatLng = {lat: -25.363, lng: 131.044};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: myLatLng
+        });
+
+        var infowindow = new google.maps.InfoWindow({
+            content: "hello dick"
+        });
+
+        infowindow.setPosition(myLatLng);
+
+        infowindow.open(map);
+      }
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBztdrbMors7H1VrRH9DQW6IVzySSDHGHg&callback=initMap">
+    </script>
 </body>
 </html>
