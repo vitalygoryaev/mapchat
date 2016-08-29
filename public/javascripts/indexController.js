@@ -4,12 +4,13 @@ angular.module('mapchat')
     .run(function ($rootScope) {
         $rootScope.version = 1; 
     })
-    .controller('index', function($scope) {
+    .controller('index', function($scope, $anchorScroll) {
         var self = this;
 
         self.messages = [];
         self.radius = 1000; // meters
-        self.showLocationError = true;
+        self.showLocationError = false;
+        self.locationErrorMessage = 'Could not get your location. Check if Location Services are enabled on your device.';
 
         var socket = io();
 
@@ -19,16 +20,23 @@ angular.module('mapchat')
             self.socketId = '/#' + this.id;
             self.messages = messages || [];
             $scope.$digest();
+            scrollToBottom();
+        });
+
+        socket.on('historyDelivered', function(messages) {
+            self.messages = self.messages.concat(messages);
+            $scope.$digest();
+            $anchorScroll(self.firstMessageId);
         });
 
         socket.on('newMessageReceived', function(message) {
-            console.log("got new message on client: " + JSON.stringify(message));
             self.messages.push(message);
             $scope.$digest();
+            scrollToBottom();
         });
         
         this.sendMessage = function (messageText) {
-            socket.emit("newMessage", { messageText: messageText, position: self.position });
+            socket.emit("newMessage", { messageText: messageText, position: self.position, userName: self.userName });
 
             self.messageText = '';
         }
@@ -67,5 +75,19 @@ angular.module('mapchat')
 
         self.getMessageDistance = function (message) {
             return distance(self.position.latitude, self.position.longitude, message.position.latitude, message.position.longitude);
+        }
+
+        function scrollToBottom() {
+            if (self.lastMessageIsVisible) {
+                $anchorScroll('afterMessagesAnchor');
+            }
+        }
+
+        self.getHistory = function(firstMessageId) {
+            if (!self.lastMessageIsVisible) {
+                console.log("loading history");
+                self.firstMessageId = firstMessageId;
+                socket.emit('getHistory', self.messages.length);
+            }
         }
     });

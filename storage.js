@@ -27,7 +27,8 @@ module.exports = class database {
                     longitude: Number,
                     accuracy: Number
                 },
-                socketId: String
+                socketId: String,
+                userName: String
             });
             messagesSchema.index({ location : '2dsphere' });
 
@@ -49,7 +50,7 @@ module.exports = class database {
             });
     }
 
-    getMessages (consumer) {
+    getMessages (consumer, offset = 0) {
         let query = {
             location: {
                 $near: {
@@ -62,7 +63,7 @@ module.exports = class database {
             }
         };
 
-        return this.Message.find(query).sort('-receivedAt').limit(30).exec()
+        return this.Message.find(query).sort('-receivedAt').skip(offset).limit(30).exec()
             .catch(function errorHander(error) {
                 console.log("get messages failed: " + error)
             });

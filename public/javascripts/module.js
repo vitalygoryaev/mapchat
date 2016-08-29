@@ -1,1 +1,1 @@
-angular.module('mapchat', []);
+angular.module('mapchat', ['angular-inview']);

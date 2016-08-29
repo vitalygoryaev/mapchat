@@ -51,6 +51,21 @@ function socketsHandler(socket){
             });
     });
 
+    socket.on('getHistory', function (offset) {
+        let consumer = consumers[socket.id];
+        
+        // reject consumer without position
+        if (!consumer || !consumer.position || !consumer.position.longitude || !consumer.position.latitude || !consumer.radius) {
+            return;
+        }
+        
+        // get only new messages that were received after update
+        storage.getMessages(consumer, offset)
+            .then(messages => {
+                socket.emit("historyDelivered", messages);
+            });
+    });
+
     function broadcastToConsumersInRange(consumers, message) {
         Object.keys(consumers).forEach((socketId) => {
             if (geo.consumerIsInRange(consumers[socketId], message)) {
