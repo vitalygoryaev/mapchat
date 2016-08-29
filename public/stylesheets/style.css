@@ -12,8 +12,8 @@ button#sendButton {
 }
 
 div.message-area {
+  margin-top: 4em;
   margin-bottom: 8em;
-  margin-left: 0px;
 }
 
 #username {
@@ -42,6 +42,7 @@ div.message.ownMessage {
 
 div.messageText {
   font-size: 14pt;
+  overflow: hidden;
 }
 
 div.ownMessage div.coords {
@@ -99,4 +100,8 @@ div.headerText {
 
 .form-control {
 
+}
+
+.container {
+  padding: 0;
 }

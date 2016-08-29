@@ -6,44 +6,49 @@
     <link rel="stylesheet" href="/stylesheets/bootstrap/css/bootstrap.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css'/>
 </head>
-<body ng-app="mapchat" class="container-fluid">
-    <div class="main-area col-xs-12 col-md-6 col-md-offset-3" ng-controller="index as c" ng-cloak>
-        <div class="">
-            <div class="fixedTop col-xs-12 col-md-6">
-                <div>
-                    <div class="col-xs-6 headerText">mapchat</div>
-                    <div class="col-xs-6"><input id="username" class="form-control" type="text" placeholder="Your nickname" ng-model="c.userName"></div>
-            </div>
+<body ng-app="mapchat" ng-controller="index as c">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        
+            <div class="container">
+                <div class="col-xs-6 headerText">mapchat</div>
+                <div class="col-xs-6"><input id="username" class="form-control" type="text" placeholder="Your nickname" ng-model="c.userName"></div>
         </div>
-        <div class="message-area row">
-            <div class="col-xs-12">
+    </nav>
+    <div  class="container">
+    <div class="main-area"  ng-cloak>
+        <div class="message-area">
+
             <div ng-if="c.showLocationError" class="h1">{{c.locationErrorMessage}}</div>
 
             <div class="row" ng-repeat="message in c.messages | orderBy: 'receivedAt' track by message._id " id={{message._id}}>
+                <div class="col-xs-12">
                 <div ng-if=$first in-view="$inview&&c.getHistory(message._id)"></div>
                 <div class="message"  ng-class="{ 'ownMessage': c.socketId === message.socketId }">
                     <div class="userName" >{{message.userName}}</div>
                     <div class="messageText" >{{message.messageText}}</div>
                     <div class="coords">{{c.getMessageDistance(message)|number:0|distance}}<span class="messageTime">{{message.receivedAt|time}}</span></div>
                 </div>
+                </div>
             </div>
             <div in-view="c.lastMessageIsVisible = $inview" id="afterMessagesAnchor"></div>
-            </div>
         </div>
-        <div class="input-area ">
-            <div class="fixedBottom col-xs-12 col-md-6">
-                <form >
-                    <div class="row">
-                        <div class="col-xs-9">
-                            <textarea ng-model="c.messageText" placeholder="write your message" id="messageText" class="form-control"></textarea>
-                        </div>
-                        <div class="col-xs-3">
-                            <button type="submit" ng-click="c.sendMessage(c.messageText)" id="sendButton" class="btn btn-primary">Send</button>
-                        </div>
+
+        <nav class="navbar navbar-default navbar-fixed-bottom">
+        <div class="input-area container">
+           
+            <form >
+                <div class="row">
+                    <div class="col-xs-9">
+                        <textarea ng-model="c.messageText" placeholder="write your message" id="messageText" class="form-control"></textarea>
                     </div>
-                </form>
-            </div>
+                    <div class="col-xs-3">
+                        <button type="submit" ng-click="c.sendMessage(c.messageText)" id="sendButton" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+            </form>
         </div>
+        <nav>
+    </div>
     </div>
 
     <script src="javascripts/lib/jquery.min.js"></script>
