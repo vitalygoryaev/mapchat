@@ -170,16 +170,10 @@ angular.module('mapchat')
 
         self.closeMap = function() {
             self.showMap = false;
-
-            // scroll to bottom
-            setTimeout(function() {$anchorScroll('afterMessagesAnchor')}, 50);
         }
 
         self.closeSettings = function() {
             self.showSettings = false;
-
-            // scroll to bottom
-            setTimeout(function() {$anchorScroll('afterMessagesAnchor')}, 50);
 
             // save nick and radius to local storage
             if (self.radius) {
