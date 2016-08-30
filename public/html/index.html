@@ -7,15 +7,30 @@
     <link rel='stylesheet' href='/stylesheets/style.css'/>
 </head>
 <body ng-app="mapchat" ng-controller="index as c">
-    <div  ng-show="c.showMap" class="overlay" ng-class="{'opened': c.showMap }">
+    <div  ng-show="c.showMap" class="overlay">
         <div id="map" class="overlay-content"></div>
-        <button class="closebtn btn btn-primary" ng-click="c.closeMap()">CLOSE</button>
+        <button class="close-map-btn btn btn-primary" ng-click="c.closeMap()">CLOSE</button>
     </div>
+    <div  class="settings-overlay" ng-class="{'opened': c.showSettings }">
+        <div class="settings-overlay-content">
+            <div class="col-xs-12 col-md-6 col-md-offset-3">
+                <label for="nickname">Nickname</label>
+                <input id="nickname" placeholder="Nickname" ng-model="c.userName" class="form-control"/>
+                <div class="input-info" ng-hide="c.userName">Please fill your nickname before posting messages.</div>
+            </div>
+            <div class="col-xs-12 col-md-6 col-md-offset-3">
+                <label for="radius">Radius</label>
+                <input id="radius" placeholder="Radius" ng-model="c.radius" class="form-control"/>
+            </div>
+        </div>
+        <button class="close-settings-btn btn btn-primary" ng-click="c.closeSettings()">OK</button>
+    </div>
+    <div  class="under-settings-overlay opened" ng-if="c.showSettings" ng-click="c.closeSettings()"></div>
     <div ng-if="!c.showMap">
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="col-xs-6 headerText">mapchat</div>
-            <div class="col-xs-6"><input id="username" class="form-control" type="text" placeholder="Your nickname" ng-model="c.userName"></div>
+            <div class="col-xs-6"><a href="" ng-click="c.showSettings = true" class="settings-link">Settings</a></div>
         </div>
     </nav>
     <div  class="container">
@@ -41,7 +56,7 @@
                 <form >
                     <div class="row">
                         <div class="col-xs-9">
-                            <textarea ng-model="c.messageText" placeholder="write your message" id="messageText" class="form-control"></textarea>
+                            <textarea ng-model="c.messageText" placeholder="write your message" id="messageText" class="form-control" ng-enter="c.sendMessage(c.messageText)"></textarea>
                         </div>
                         <div class="col-xs-3">
                             <button type="submit" ng-click="c.sendMessage(c.messageText)" id="sendButton" class="btn btn-primary">Send</button>
@@ -60,7 +75,8 @@
     <script src="javascripts/module.js"></script>
     <script src="javascripts/filters.js"></script>
     <script src="javascripts/indexController.js"></script>
-    <script src="javascripts/lib//socket.io.js"></script>
+    <script src="javascripts/lib/socket.io.js"></script>
+    <script src="javascripts/directives.js"></script>
     <script src="javascripts/script.js"></script>
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBztdrbMors7H1VrRH9DQW6IVzySSDHGHg">

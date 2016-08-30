@@ -8,9 +8,11 @@ angular.module('mapchat')
         var self = this;
 
         self.messages = [];
-        self.radius = 1000; // meters
+        self.radius = localStorage.getItem('radius') || 300; // meters
+        self.userName = localStorage.getItem('userName');
         self.showLocationError = false;
         self.showMap = false;
+        self.showSettings = false;
         var openedInfowindows = [];
         var map;
         self.locationErrorMessage = 'Could not get your location. Check if Location Services are enabled on your device.';
@@ -39,6 +41,11 @@ angular.module('mapchat')
         });
         
         this.sendMessage = function (messageText) {
+            if (!self.userName) {
+                self.showSettings = true;
+                return;
+            }
+
             socket.emit("newMessage", { messageText: messageText, position: self.position, userName: self.userName });
 
             self.messageText = '';
@@ -132,5 +139,18 @@ angular.module('mapchat')
             openedInfowindows.forEach(function(infowindow) {
                 infowindow.close();
             })
+        }
+
+        self.closeSettings = function() {
+            self.showSettings = false;
+
+            // save nick and radius to local storage
+            if (self.radius) {
+                localStorage.setItem('radius', self.radius);
+            }
+            
+            if (self.userName) {
+                localStorage.setItem('userName', self.userName);
+            }
         }
     });
