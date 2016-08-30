@@ -13,7 +13,7 @@ angular.module('mapchat')
         self.showLocationError = false;
         self.showMap = false;
         self.showSettings = false;
-        var openedInfowindows = [];
+        var openedInfowindows = {};
         var map;
         self.locationErrorMessage = 'Could not get your location. Check if Location Services are enabled on your device.';
 
@@ -26,18 +26,21 @@ angular.module('mapchat')
             self.messages = messages || [];
             $scope.$digest();
             scrollToBottom();
+            //renderMessagesOnMap();
         });
 
         socket.on('historyDelivered', function(messages) {
             self.messages = self.messages.concat(messages);
             $scope.$digest();
             $anchorScroll(self.firstMessageId);
+            //renderMessagesOnMap();
         });
 
         socket.on('newMessageReceived', function(message) {
             self.messages.push(message);
             $scope.$digest();
             scrollToBottom();
+            //renderMessagesOnMap();
         });
         
         this.sendMessage = function (messageText) {
@@ -102,47 +105,81 @@ angular.module('mapchat')
         }
         
         self.renderMap = function(message) {
-            var myLatLng = {lat: message.position.latitude, lng: message.position.longitude};
+            function showMessagesOnMap() {
+                var myLatLng = {lat: message.position.latitude, lng: message.position.longitude};
 
-            var mapDiv = document.getElementById('map');
-            
-            if (!map) {
-                map = new google.maps.Map(mapDiv, {
-                    zoom: 18,
-                    center: myLatLng
-                });
-            } else {
+                renderMessagesOnMap();
+
                 map.setCenter(myLatLng);
                 map.setZoom(18);
             }
 
-            self.messages.forEach(function(messageItem) {
-                var messageLatLng = {lat: messageItem.position.latitude, lng: messageItem.position.longitude};
-
-                var infowindow = new google.maps.InfoWindow({
-                    content: messageItem.messageText
-                });
-
-                infowindow.setPosition(messageLatLng);
-
-                openedInfowindows.push(infowindow);
-                infowindow.open(map);
-            });
+            if (!map) {
+                setTimeout(showMessagesOnMap, 500);
+            } else {
+                showMessagesOnMap();
+            }
 
             self.showMap = true;
+        }
+
+        function renderMessagesOnMap() {
+            if (self.messages) {
+                var mapDiv = document.getElementById('map');
+                var myLatLng = {lat: self.messages[0].position.latitude, lng: self.messages[0].position.longitude};
+
+                if (!map) {
+                    map = new google.maps.Map(mapDiv, {
+                        zoom: 18,
+                        center: myLatLng
+                    });
+                }
+
+                self.messages.forEach(function (messageItem) {
+                    if (!openedInfowindows[messageItem._id]) {
+                        var messageLatLng = {lat: messageItem.position.latitude, lng: messageItem.position.longitude};
+
+                        var infowindow = new google.maps.InfoWindow({
+                            content: messageItem.messageText
+                        });
+
+                        infowindow.setPosition(messageLatLng);
+
+                        openedInfowindows[messageItem._id] = infowindow;
+                        infowindow.open(map);
+                    }
+                });
+
+                // close infowindows that dont have messages anymore
+                Object.keys(openedInfowindows).forEach(function(messageId) {
+                    var found = false;
+
+                    self.messages.forEach(function(messageItem) {
+                        if (messageItem._id === messageId) {
+                            found = true;
+                        }
+                    });
+
+                    if (!found) {
+                        openedInfowindows[messageId].close();
+                        delete openedInfowindows[messageId];
+                    }
+                });
+            }
         }
 
         self.closeMap = function() {
             self.showMap = false;
 
-            // close all infowindows
-            openedInfowindows.forEach(function(infowindow) {
-                infowindow.close();
-            })
+            // scroll to bottom
+            setTimeout(function() {$anchorScroll('afterMessagesAnchor')}, 50);
         }
 
         self.closeSettings = function() {
             self.showSettings = false;
+
+            // scroll to bottom
+            setTimeout(function() {$anchorScroll('afterMessagesAnchor')}, 50);
 
             // save nick and radius to local storage
             if (self.radius) {

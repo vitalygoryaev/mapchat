@@ -7,7 +7,7 @@
     <link rel='stylesheet' href='/stylesheets/style.css'/>
 </head>
 <body ng-app="mapchat" ng-controller="index as c">
-    <div  ng-show="c.showMap" class="overlay">
+    <div class="overlay" ng-class="{'opened': c.showMap }">
         <div id="map" class="overlay-content"></div>
         <button class="close-map-btn btn btn-primary" ng-click="c.closeMap()">CLOSE</button>
     </div>
@@ -26,7 +26,7 @@
         <button class="close-settings-btn btn btn-primary" ng-click="c.closeSettings()">OK</button>
     </div>
     <div  class="under-settings-overlay opened" ng-if="c.showSettings" ng-click="c.closeSettings()"></div>
-    <div ng-if="!c.showMap">
+    <div>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="col-xs-6 headerText">mapchat</div>
@@ -37,10 +37,10 @@
         <div class="main-area"  ng-cloak>
             <div class="message-area">
                 <div ng-if="c.showLocationError" class="h1">{{c.locationErrorMessage}}</div>
-                <div class="row" ng-repeat="message in c.messages | orderBy: 'receivedAt' track by message._id " id={{message._id}} ng-click="c.renderMap(message)">
+                <div class="row" ng-repeat="message in c.messages | orderBy: 'receivedAt' track by message._id " id={{message._id}}>
                     <div class="col-xs-12">
                     <div ng-if=$first in-view="$inview&&c.getHistory(message._id)"></div>
-                    <div class="message"  ng-class="{ 'ownMessage': c.socketId === message.socketId }">
+                    <div class="message"  ng-class="{ 'ownMessage': c.socketId === message.socketId }" ng-click="c.renderMap(message)">
                         <div class="userName" >{{message.userName}}</div>
                         <div class="messageText" >{{message.messageText}}</div>
                         <div class="coords">{{c.getMessageDistance(message)|number:0|distance}}<span class="messageTime">{{message.receivedAt|time}}</span></div>
@@ -55,10 +55,10 @@
             
                 <form >
                     <div class="row">
-                        <div class="col-xs-9">
+                        <div class="col-xs-9 message-text-container">
                             <textarea ng-model="c.messageText" placeholder="write your message" id="messageText" class="form-control" ng-enter="c.sendMessage(c.messageText)"></textarea>
                         </div>
-                        <div class="col-xs-3">
+                        <div class="col-xs-3 send-button-container">
                             <button type="submit" ng-click="c.sendMessage(c.messageText)" id="sendButton" class="btn btn-primary">Send</button>
                         </div>
                     </div>

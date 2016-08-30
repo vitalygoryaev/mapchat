@@ -104,7 +104,7 @@ div.headerText {
 
 .overlay {
     /* Height & width depends on how you want to reveal the overlay (see JS below) */   
-    height: 100%;
+    height: 0%;
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
     left: 0;
@@ -113,13 +113,19 @@ div.headerText {
     background-color: rgb(0,0,0); /* Black fallback color */
     background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
     overflow-x: hidden; /* Disable horizontal scroll */
+    transition: 0.5s;
+}
+
+.overlay.opened {
+  height: 50%;
 }
 
 .overlay-content { 
     position: relative;
-    top: 0; /* 25% from the top */
-    width: 100%; /* 100% width */
+    bottom: 30px;
+    width: 100%;
     height: 100%;
+    padding-bottom: 30px;
     text-align: center; /* Centered text/links */
 }
 
@@ -128,7 +134,8 @@ div.headerText {
     bottom: 0;
     left: 0;
     width: 100%;
-    font-size: 50px;
+    font-size: 14px;
+    border-radius: 0;
 }
 
 .settings-overlay {
@@ -162,7 +169,7 @@ div.headerText {
 }
 
 .settings-overlay.opened {
-    height: 50%;
+    height: 60%;
 }
 
 .settings-overlay-content { 
@@ -180,7 +187,8 @@ div.headerText {
     bottom: 0;
     left: 0;
     width: 100%;
-    font-size: 30px;
+    font-size: 16px;
+    border-radius: 0;
 }
 
 .input-info {
@@ -198,9 +206,18 @@ div.headerText {
 }
 
 #sendButton {
-  height: 100%;
-  width: 100%;
+  height: 55px;
+  width: 80%;
   margin: 5px;
-  font-size: 23pt;
-  border-radius: 10px;
+  font-size: 16pt;
+  border-radius: 6px;
+}
+
+.message-text-container {
+  padding-right: 0;
+}
+
+.send-button-container {
+  padding-left: 5px;
+  padding-right: 5px;
 }

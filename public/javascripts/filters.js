@@ -19,6 +19,6 @@ angular.module('mapchat')
                 return $filter('date')(date, 'HH:mm');
             }
 
-            return $filter('date')(date, 'UTC');
+            return $filter('date')(date, 'yyyy-MM-dd HH:mm');
         };
     });
