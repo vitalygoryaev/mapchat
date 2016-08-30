@@ -102,7 +102,36 @@ div.headerText {
   padding: 0;
 }
 
-div#map {
+
+.overlay {
+    /* Height & width depends on how you want to reveal the overlay (see JS below) */   
+    height: 100%;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    background-color: rgb(0,0,0); /* Black fallback color */
+    background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
+    overflow-x: hidden; /* Disable horizontal scroll */
+}
+
+.overlay.opened {
   width: 100%;
-  height: 400px;
+}
+
+.overlay-content { 
+    position: relative;
+    top: 0; /* 25% from the top */
+    width: 100%; /* 100% width */
+    height: 100%;
+    text-align: center; /* Centered text/links */
+    margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+}
+
+.overlay .closebtn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    font-size: 50px;
 }

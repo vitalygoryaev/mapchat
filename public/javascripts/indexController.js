@@ -11,6 +11,8 @@ angular.module('mapchat')
         self.radius = 1000; // meters
         self.showLocationError = false;
         self.showMap = false;
+        var openedInfowindows = [];
+        var map;
         self.locationErrorMessage = 'Could not get your location. Check if Location Services are enabled on your device.';
 
         var socket = io();
@@ -96,11 +98,16 @@ angular.module('mapchat')
             var myLatLng = {lat: message.position.latitude, lng: message.position.longitude};
 
             var mapDiv = document.getElementById('map');
-
-            var map = new google.maps.Map(mapDiv, {
-                zoom: 16,
-                center: myLatLng
-            });
+            
+            if (!map) {
+                map = new google.maps.Map(mapDiv, {
+                    zoom: 18,
+                    center: myLatLng
+                });
+            } else {
+                map.setCenter(myLatLng);
+                map.setZoom(18);
+            }
 
             self.messages.forEach(function(messageItem) {
                 var messageLatLng = {lat: messageItem.position.latitude, lng: messageItem.position.longitude};
@@ -111,9 +118,19 @@ angular.module('mapchat')
 
                 infowindow.setPosition(messageLatLng);
 
+                openedInfowindows.push(infowindow);
                 infowindow.open(map);
             });
 
             self.showMap = true;
+        }
+
+        self.closeMap = function() {
+            self.showMap = false;
+
+            // close all infowindows
+            openedInfowindows.forEach(function(infowindow) {
+                infowindow.close();
+            })
         }
     });
