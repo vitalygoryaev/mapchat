@@ -19,6 +19,8 @@ angular.module('mapchat')
 
         var socket = io();
 
+        navigator.geolocation.getCurrentPosition(newLocation, locationFailed);
+
         startWatchPosition();
 
         socket.on('messagesDelivered', function(messages) {
@@ -54,9 +56,8 @@ angular.module('mapchat')
             self.messageText = '';
         }
 
-        function startWatchPosition() {
-            navigator.geolocation.watchPosition(function success(location) {
-                self.showLocationError = false;
+        function newLocation(location) {
+            self.showLocationError = false;
                 
                 var position = {
                     longitude: location.coords.longitude,
@@ -67,10 +68,15 @@ angular.module('mapchat')
                 self.position = position;
 
                 socket.emit("newPosition", { position: position, radius: self.radius });
-            }, function error(err) {
-                self.showLocationError = true;
-                console.log("failed to get location: " + JSON.stringify(err));
-            });
+        }
+
+        function locationFailed(err) {
+            self.showLocationError = true;
+            console.log("failed to get location: " + JSON.stringify(err));
+        }
+
+        function startWatchPosition() {
+            navigator.geolocation.watchPosition(onNewLocation, locationFailed);
         }
 
         function distance(lat1, lon1, lat2, lon2) {
