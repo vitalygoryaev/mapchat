@@ -18,7 +18,8 @@ angular.module('mapchat')
         self.locationErrorMessage = 'Could not get your location. Check if Location Services are enabled on your device.';
 
         var socket = io();
-
+        
+        self.locationStatus = { message: 'getting location...', code: 'waiting' };
         navigator.geolocation.getCurrentPosition(newLocation, locationFailed);
 
         startWatchPosition();
@@ -57,6 +58,7 @@ angular.module('mapchat')
         }
 
         function newLocation(location) {
+            self.locationStatus = { message: 'successfully got location', code: 'success' };
             self.showLocationError = false;
                 
                 var position = {
@@ -71,12 +73,13 @@ angular.module('mapchat')
         }
 
         function locationFailed(err) {
+            self.locationStatus = { message: 'failed to get location', code: 'fail' };
             self.showLocationError = true;
             console.log("failed to get location: " + JSON.stringify(err));
         }
 
         function startWatchPosition() {
-            navigator.geolocation.watchPosition(onNewLocation, locationFailed);
+            navigator.geolocation.watchPosition(newLocation, locationFailed);
         }
 
         function distance(lat1, lon1, lat2, lon2) {

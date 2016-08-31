@@ -20,7 +20,7 @@ div.message-area {
 }
 
 div.main-area {
-  background-color: #FCFCFC;
+
 }
 
 div.message {
@@ -220,4 +220,17 @@ div.headerText {
 .send-button-container {
   padding-left: 5px;
   padding-right: 5px;
+}
+
+div.status {
+    color: white;
+}
+
+div.status.waiting {
+    color: black;
+    background-color: lightgrey;
+}
+
+div.status.fail {
+    background-color: indianred;
 }
