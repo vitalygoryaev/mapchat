@@ -234,3 +234,17 @@ div.status.waiting {
 div.status.fail {
     background-color: indianred;
 }
+
+div.no-messages {
+    color: #cccccc;
+    font-style: italic;
+}
+
+.error {
+    color: red;
+}
+
+.glyphicon-map-marker {
+    float:right;
+    font-size: 16pt;
+}

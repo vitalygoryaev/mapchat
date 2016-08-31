@@ -49,6 +49,7 @@ angular.module('mapchat')
         this.sendMessage = function (messageText) {
             if (!self.userName) {
                 self.showSettings = true;
+                $('#nickname').focus();
                 return;
             }
 

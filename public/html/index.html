@@ -16,7 +16,7 @@
             <div class="col-xs-12 col-md-6 col-md-offset-3">
                 <label for="nickname">Nickname</label>
                 <input id="nickname" placeholder="Nickname" ng-model="c.userName" class="form-control"/>
-                <div class="input-info" ng-hide="c.userName">Please fill your nickname before posting messages.</div>
+                <div class="input-info" ng-hide="c.userName" ng-class="{ error: !c.userName }">Please fill your nickname before posting messages.</div>
             </div>
             <div class="col-xs-12 col-md-6 col-md-offset-3">
                 <label for="radius">Radius</label>
@@ -44,12 +44,13 @@
                     <div class="col-xs-12">
                     <div ng-if=$first in-view="$inview&&c.getHistory(message._id)"></div>
                     <div class="message"  ng-class="{ 'ownMessage': c.socketId === message.socketId }" ng-click="c.renderMap(message)">
-                        <div class="userName" >{{message.userName}}</div>
+                        <div class="userName" >{{message.userName}} <span class="glyphicon glyphicon-map-marker"></span></div>
                         <div class="messageText" >{{message.messageText}}</div>
                         <div class="coords">{{c.getMessageDistance(message)|number:0|distance}}<span class="messageTime">{{message.receivedAt|time}}</span></div>
                     </div>
                     </div>
                 </div>
+                <div class="no-messages" ng-if="!c.messages">no messages in {{c.radius}}m radius.</div>
                 <div in-view="c.lastMessageIsVisible = $inview" id="afterMessagesAnchor"></div>
             </div>
 
