@@ -6,25 +6,46 @@
 
 var app = require('../app');
 var debug = require('debug')('mapchat:server');
-var http = require('http');
-
+var https = require('https');
+var express = require('express');
+var fs = require('fs');
 
 /**
  * Get port from environment and store in Express.
  */
 
+
+
 var port = normalizePort(process.env.PORT || '3000');
+var sslPort = 8443;
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var http = express.createServer();
+
+// set up a route to redirect http to https
+http.get('*', function(req, res){  
+    res.redirect('https://' + req.hostname + req.url)
+});
+
+// have it listen on 8080
+http.listen(3000);
+
+/**
+ * SSL Options
+ */
+
+var options = {
+  key: fs.readFileSync('/etc/letsencrypt/live/mapchat.info/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/mapchat.info/cert.pem')
+};
+
+var server = https.createServer(options, app).listen(8443);
 var io = require('socket.io')(server);
 var sockets = require('../sockets').call({ io });
-
-
 
 /**
  * Listen on provided port, on all network interfaces.
