@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+let mongoose = require('mongoose');
 mongoose.Promise = Promise;
 
 module.exports = class database {

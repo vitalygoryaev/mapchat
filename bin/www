@@ -4,48 +4,60 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('mapchat:server');
-var https = require('https');
-var http = require('http');
-var express = require('express');
-var fs = require('fs');
+let app = require('../app');
+let debug = require('debug')('mapchat:server');
+let https = require('https');
+let http = require('http');
+let express = require('express');
+let fs = require('fs');
 
 /**
  * Get port from environment and store in Express.
  */
 
+let httpsPort = 8443;
+let httpPort = 3000;
 
-
-var port = normalizePort(process.env.PORT || '3000');
-var sslPort = 8443;
-app.set('port', port);
+let port = normalizePort(process.env.PORT || httpsPort);
+app.set('port', httpsPort);
 
 /**
  * Create HTTP server.
  */
 
-var httpApp = express();
+let server;
 
-httpApp.get('*', function(req, res){  
+if (process.env.NODE_ENV === 'production') {
+
+  let httpApp = express();
+
+  // redirect everything from http to https
+  httpApp.get('*', function (req, res) {
     res.redirect('https://' + req.hostname + req.url)
-});
+  });
 
-var httpServer = http.createServer(httpApp);
-httpServer.listen(3000);
+  let httpServer = http.createServer(httpApp);
+  httpServer.listen(httpPort);
 
-/**
- * SSL Options
- */
+  /**
+   * SSL Options
+   */
 
-var options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/mapchat.info/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/mapchat.info/cert.pem')
-};
+  let options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/mapchat.info/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/mapchat.info/cert.pem'),
+    ca: fs.readFileSync('/etc/letsencrypt/live/mapchat.info/chain.pem')
+  };
 
-var server = https.createServer(options, app).listen(8443);
-var io = require('socket.io')(server);
-var sockets = require('../sockets').call({ io });
+  server = https.createServer(options, app).listen(httpsPort);
+
+} else {
+  // for dev just serve on http
+  server = http.createServer(app).listen(httpPort);
+}
+
+let io = require('socket.io')(server);
+let sockets = require('../sockets').call({io});
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -60,7 +72,7 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+  let port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -84,7 +96,7 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
+  let bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
@@ -108,11 +120,11 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+  let addr = server.address();
+  let bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
 
-console.log('server is running on port ' + port);
+console.log('server is running on port ' + httpsPort);

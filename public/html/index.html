@@ -50,7 +50,9 @@
                     </div>
                     </div>
                 </div>
-                <div class="no-messages" ng-if="!c.messages">no messages in {{c.radius}}m radius.</div>
+                <div class="row" ng-if="!c.messages.length">
+                    <div class="no-messages col-xs-12">no messages in {{c.radius}}m radius.</div>
+                </div>
                 <div in-view="c.lastMessageIsVisible = $inview" id="afterMessagesAnchor"></div>
             </div>
 
@@ -77,6 +79,9 @@
     <script src="javascripts/lib/angular.min.js"></script>
     <script src="javascripts/lib/angular-inview.js"></script>
     <script src="javascripts/module.js"></script>
+    <script src="javascripts/socketsService.js"></script>
+    <script src="javascripts/geolocationService.js"></script>
+    <script src="javascripts/mapService.js"></script>
     <script src="javascripts/filters.js"></script>
     <script src="javascripts/indexController.js"></script>
     <script src="javascripts/lib/socket.io.js"></script>

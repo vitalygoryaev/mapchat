@@ -42,6 +42,7 @@ div.message.ownMessage {
 div.messageText {
   font-size: 14pt;
   overflow: hidden;
+  word-wrap: break-word;
 }
 
 div.ownMessage div.coords {
@@ -238,6 +239,7 @@ div.status.fail {
 div.no-messages {
     color: #cccccc;
     font-style: italic;
+
 }
 
 .error {
