@@ -4,7 +4,7 @@ mongoose.Promise = Promise;
 module.exports = class database {
     constructor () {
         let self = this;
-        mongoose.connect('mongodb://localhost/test3');
+        mongoose.connect('mongodb://localhost/messages');
 
         let db = mongoose.connection;
         db.on('error', console.error.bind(console, 'mongo connection error:'));
