@@ -1,6 +1,6 @@
 <div class="message-area">
     <message-list></message-list>
-    <div class="row" ng-if="!c.messages.length">
+    <div class="row" ng-if="!c.messages.length && c.locationStatus.code === 'success'">
         <div class="no-messages col-xs-12">no messages in {{c.radius}}m radius.</div>
     </div>
     <div in-view="c.lastMessageIsVisible = $inview" id="afterMessagesAnchor"></div>
