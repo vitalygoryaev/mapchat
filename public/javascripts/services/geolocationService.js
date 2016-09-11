@@ -1,5 +1,5 @@
 angular.module('mapchat')
-    .service('$geolocation', function($sockets) {
+    .service('$geolocation', ['$sockets', function($sockets) {
         var self = this;
         self.radius = localStorage.getItem('radius') || 300; // meters
 
@@ -44,4 +44,4 @@ angular.module('mapchat')
             dist = dist * 1.609344 * 1000;
             return dist
         }
-    });
+    }]);

@@ -7,86 +7,18 @@
     <link rel='stylesheet' href='/stylesheets/style.css'/>
 </head>
 <body ng-app="mapchat" ng-controller="index as c">
-    <div class="overlay" ng-class="{'opened': c.showMap }">
-        <div id="map" class="overlay-content"></div>
-        <button class="close-map-btn btn btn-primary" ng-click="c.closeMap()">CLOSE</button>
-    </div>
-    <div  class="settings-overlay" ng-class="{'opened': c.showSettings }">
-        <div class="settings-overlay-content">
-            <div class="col-xs-12 col-md-6 col-md-offset-3">
-                <label for="nickname">Nickname</label>
-                <input id="nickname" placeholder="Nickname" ng-model="c.userName" class="form-control"/>
-                <div class="input-info" ng-hide="c.userName" ng-class="{ error: !c.userName }">Please fill your nickname before posting messages.</div>
-            </div>
-            <div class="col-xs-12 col-md-6 col-md-offset-3">
-                <label for="radius">Radius</label>
-                <input id="radius" placeholder="Radius" ng-model="c.radius" class="form-control"/>
-            </div>
-        </div>
-        <button class="close-settings-btn btn btn-primary" ng-click="c.closeSettings()">OK</button>
-    </div>
-    <div  class="under-settings-overlay opened" ng-if="c.showSettings" ng-click="c.closeSettings()"></div>
+    <map></map>
+    <settings></settings>
     <div>
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="col-xs-6 headerText">mapchat</div>
-            <div class="col-xs-6"><a href="" ng-click="c.showSettings = true" class="settings-link">Settings</a></div>
-            <div ng-if="c.locationStatus.code !== 'success'" class="status col-xs-12" ng-class="{ fail: c.locationStatus.code === 'fail', waiting: c.locationStatus.code === 'waiting' }">
-                {{c.locationStatus.message}}
-            </div>
-        </div>
-    </nav>
+    <header></header>
     <div  class="container">
-        <div class="main-area"  ng-cloak>
-            <div class="message-area">
-                <div ng-if="c.showLocationError" class="h1">{{c.locationErrorMessage}}</div>
-                <div class="row" ng-repeat="message in c.messages | orderBy: 'receivedAt' track by message._id " id={{message._id}}>
-                    <div class="col-xs-12">
-                    <div ng-if=$first in-view="$inview&&c.getHistory(message._id)"></div>
-                    <div class="message"  ng-class="{ 'ownMessage': c.socketId === message.socketId }" ng-click="c.renderMap(message)">
-                        <div class="userName" >{{message.userName}} <span class="glyphicon glyphicon-map-marker"></span></div>
-                        <div class="messageText" >{{message.messageText}}</div>
-                        <div class="coords">{{c.getMessageDistance(message)|number:0|distance}}<span class="messageTime">{{message.receivedAt|time}}</span></div>
-                    </div>
-                    </div>
-                </div>
-                <div class="row" ng-if="!c.messages.length">
-                    <div class="no-messages col-xs-12">no messages in {{c.radius}}m radius.</div>
-                </div>
-                <div in-view="c.lastMessageIsVisible = $inview" id="afterMessagesAnchor"></div>
-            </div>
-
-            <nav class="navbar navbar-default navbar-fixed-bottom">
-            <div class="input-area container">
-            
-                <form >
-                    <div class="row">
-                        <div class="col-xs-9 message-text-container">
-                            <textarea ng-model="c.messageText" placeholder="write your message" id="messageText" class="form-control" ng-enter="c.sendMessage(c.messageText)"></textarea>
-                        </div>
-                        <div class="col-xs-3 send-button-container">
-                            <button type="submit" ng-click="c.sendMessage(c.messageText)" id="sendButton" class="btn btn-primary">Send</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            </nav>
+        <div class="main-area" ng-cloak>
+            <message-area></message-area>
+            <send-message-area></send-message-area>
         </div>
     </div>
     </div>
-    <script src="javascripts/lib/jquery.min.js"></script>
-    <script src="javascripts/lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="javascripts/lib/angular.min.js"></script>
-    <script src="javascripts/lib/angular-inview.js"></script>
-    <script src="javascripts/module.js"></script>
-    <script src="javascripts/socketsService.js"></script>
-    <script src="javascripts/geolocationService.js"></script>
-    <script src="javascripts/mapService.js"></script>
-    <script src="javascripts/filters.js"></script>
-    <script src="javascripts/indexController.js"></script>
-    <script src="javascripts/lib/socket.io.js"></script>
-    <script src="javascripts/directives.js"></script>
-    <script src="javascripts/script.js"></script>
+    <script src="applibs.js"></script>
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBztdrbMors7H1VrRH9DQW6IVzySSDHGHg">
     </script>

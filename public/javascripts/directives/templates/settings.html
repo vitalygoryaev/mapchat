@@ -1,0 +1,17 @@
+<div>
+    <div class="settings-overlay" ng-class="{'opened': c.showSettings }">
+        <div class="settings-overlay-content">
+            <div class="col-xs-12 col-md-6 col-md-offset-3">
+                <label for="nickname">Nickname</label>
+                <input id="nickname" placeholder="Nickname" ng-model="c.userName" class="form-control"/>
+                <div class="input-info" ng-hide="c.userName" ng-class="{ error: !c.userName }">Please fill your nickname before posting messages.</div>
+            </div>
+            <div class="col-xs-12 col-md-6 col-md-offset-3">
+                <label for="radius">Radius</label>
+                <input id="radius" placeholder="Radius" ng-model="c.radius" class="form-control"/>
+            </div>
+        </div>
+        <button class="close-settings-btn btn btn-primary" ng-click="c.closeSettings()">OK</button>
+    </div>
+    <div class="under-settings-overlay opened" ng-if="c.showSettings" ng-click="c.closeSettings()"></div>
+</div>

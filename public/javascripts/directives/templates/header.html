@@ -1,0 +1,9 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="col-xs-6 headerText">mapchat</div>
+        <div class="col-xs-6"><a href="" ng-click="c.showSettings = true" class="settings-link">Settings</a></div>
+        <div ng-if="c.locationStatus.code !== 'success'" class="status col-xs-12" ng-class="{ fail: c.locationStatus.code === 'fail', waiting: c.locationStatus.code === 'waiting' }">
+            {{c.locationStatus.message}}
+        </div>
+    </div>
+</nav>

@@ -8,7 +8,7 @@ angular.module('mapchat')
             return 'Distance: ' + distanceString + 'm';
         };
     })
-    .filter('time', function($filter) {
+    .filter('time', ['$filter', function($filter) {
         return function(dateString) {
             var date = new Date(dateString);
 
@@ -21,4 +21,4 @@ angular.module('mapchat')
 
             return $filter('date')(date, 'yyyy-MM-dd HH:mm');
         };
-    });
+    }]);

@@ -1,0 +1,6 @@
+<div class="row" ng-repeat="message in c.messages | orderBy: 'receivedAt' track by message._id " id={{message._id}}>
+    <div class="col-xs-12">
+        <div ng-if=$first in-view="$inview&&c.getHistory(message._id)"></div>
+        <message></message>
+    </div>
+</div>

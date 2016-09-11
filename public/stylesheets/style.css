@@ -173,10 +173,10 @@ div.headerText {
     height: 60%;
 }
 
-.settings-overlay-content { 
+.settings-overlay-content {
     position: relative;
-    top: 20%; 
-    height: 100%;
+    top: 20%;
+    height: 80%;
 }
 
 .settings-overlay-content > div {

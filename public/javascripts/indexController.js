@@ -1,10 +1,7 @@
 "use strict";
-
 angular.module('mapchat')
-    .run(function ($rootScope) {
-        $rootScope.version = 1; 
-    })
-    .controller('index', function($scope, $anchorScroll, $document, $sockets, $geolocation, $map) {
+    .controller('index', ['$scope', '$anchorScroll', '$sockets', '$geolocation', '$map', 
+        function($scope, $anchorScroll, $sockets, $geolocation, $map) {
         var self = this;
 
         self.messages = [];
@@ -13,7 +10,7 @@ angular.module('mapchat')
         self.showLocationError = false;
         self.showMap = false;
         self.showSettings = false;
-        self.locationErrorMessage = 'Could not get your location. Check if Location Services are enabled on your device.';
+        self.locationStatus = { code: 'waiting', message: 'waiting for your location...'};
 
         $geolocation.getCurrentPosition(newLocation, locationFailed);
         $geolocation.startWatchPosition(newLocation, locationFailed);
@@ -52,14 +49,14 @@ angular.module('mapchat')
 
         function newLocation(location) {
             self.locationStatus = { code: 'success' };
-            self.showLocationError = false;
             self.position = $geolocation.position;
+            $scope.$digest();
         }
 
         function locationFailed(err) {
             self.locationStatus = { message: 'failed to get location', code: 'fail' };
-            self.showLocationError = true;
             console.log("failed to get location: " + JSON.stringify(err));
+            $scope.$digest();
         }
 
         self.getMessageDistance = $geolocation.getMessageDistance;
@@ -100,4 +97,4 @@ angular.module('mapchat')
                 localStorage.setItem('userName', self.userName);
             }
         }
-    });
+    }]);

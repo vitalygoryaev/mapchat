@@ -1,0 +1,14 @@
+<nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="input-area container">
+        <form >
+            <div class="row">
+                <div class="col-xs-9 message-text-container">
+                    <textarea ng-model="c.messageText" placeholder="write your message" id="messageText" class="form-control" ng-enter="c.sendMessage(c.messageText)"></textarea>
+                </div>
+                <div class="col-xs-3 send-button-container">
+                    <button type="submit" ng-click="c.sendMessage(c.messageText)" id="sendButton" class="btn btn-primary">Send</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</nav>

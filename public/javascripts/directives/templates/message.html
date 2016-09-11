@@ -1,0 +1,5 @@
+<div class="message"  ng-class="{ 'ownMessage': c.socketId === message.socketId }" ng-click="c.renderMap(message)">
+    <div class="userName" >{{message.userName}} <span class="glyphicon glyphicon-map-marker"></span></div>
+    <div class="messageText" >{{message.messageText}}</div>
+    <div class="coords">{{c.getMessageDistance(message)|number:0|distance}}<span class="messageTime">{{message.receivedAt|time}}</span></div>
+</div>
