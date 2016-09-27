@@ -10,6 +10,4 @@ Scroll to top to load history.
 
 <h3>TODO:</h3>
 
-1. move socket interactions to separate angular service
-2. move markup and logic into directives
-3. add tests for node and angular
+1. add tests for node and angular
